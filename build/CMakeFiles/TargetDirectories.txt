@@ -1,0 +1,3 @@
+/media/yjy/DATA1/VSProject/palmprint_dectection/palmprint_dectection/build/CMakeFiles/rebuild_cache.dir
+/media/yjy/DATA1/VSProject/palmprint_dectection/palmprint_dectection/build/CMakeFiles/main.app.dir
+/media/yjy/DATA1/VSProject/palmprint_dectection/palmprint_dectection/build/CMakeFiles/edit_cache.dir
