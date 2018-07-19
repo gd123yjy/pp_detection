@@ -17,8 +17,6 @@ ImageReader::ImageReader(const std::string& path)
 	
 	cv::cvtColor(img, img,cv::COLOR_BGR2GRAY);
 	cv::threshold(img, img, 30, 200.0, cv::THRESH_BINARY);
-	//cv::imshow("template", img);
-	//cv::waitKey();
 }
 
 void ImageReader::loadImg(const string& path)
@@ -28,8 +26,6 @@ void ImageReader::loadImg(const string& path)
 
 	cv::cvtColor(img, img,cv::COLOR_BGR2GRAY);
 	cv::threshold(img, img, 30, 200.0, cv::THRESH_BINARY);
-	//cv::imshow("template", img);
-	//cv::waitKey();
 	return;
 }
 

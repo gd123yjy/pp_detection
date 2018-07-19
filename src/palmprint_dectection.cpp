@@ -1,17 +1,43 @@
 #include "ImageReader.h"
 #include "HandDetector.h"
 
+#include "math.h"
 #include "opencv2/opencv.hpp"
 
-cv::Mat binary(cv::Mat colorImg)
-{
-	cv::Mat grayImg,result;
+using namespace cv;
 
-	//todo: binary basing on skin color model
-	cv::cvtColor(colorImg, grayImg,cv::COLOR_BGR2GRAY);
-	cv::threshold(grayImg, result, 30, 200.0, cv::THRESH_BINARY);
-	//cv::imshow("binary Img", result);
-	//cv::waitKey();
+int distance(Vec3b a,Vec3b b)
+{
+	return sqrt(pow((a[0]-b[0]),2)+pow((a[1]-b[1]),2)+pow((a[2]-b[2]),2));
+}
+
+Mat binary(Mat colorImg)
+{
+	Mat result;
+
+	result.create(colorImg.size(),CV_8U);  
+
+	//binary basing on skin color model
+	//bgr(38,55,71)~bgr(20,26,30) mid(29,40,50)
+    MatConstIterator_<Vec3b> it_in=colorImg.begin<Vec3b>();  
+    MatConstIterator_<Vec3b> itend_in=colorImg.end<Vec3b>();  
+    MatIterator_<uchar> it_out=result.begin<uchar>();  
+    MatIterator_<uchar> itend_out=result.end<uchar>();  
+    while(it_in!=itend_in)  
+    {  
+		if(distance(*it_in,Vec3b(29,40,50))<35)
+		{
+			(*it_out)=200;  
+		}
+		else
+		{
+			(*it_out)=0; 
+		}
+
+        it_in++;  
+        it_out++;  
+    }  
+
 	return result;
 }
 
@@ -31,7 +57,7 @@ void matchTemplateFromBinaryImg(cv::Mat colorImg,cv::Mat binaryTemplate)
 	cv::matchTemplate(binary(colorImg), binaryTemplate, result,cv::TM_CCOEFF);//TM_SQDIFF
 
 	cv::minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, cv::Mat());
-	cv::rectangle(colorImg, minLoc, cv::Point(minLoc.x + binaryTemplate.cols, minLoc.y + binaryTemplate.rows), cv::Scalar::all(0), 2, 8, 0);
+	cv::rectangle(colorImg, maxLoc, cv::Point(maxLoc.x + binaryTemplate.cols, maxLoc.y + binaryTemplate.rows), cv::Scalar(0,155,0), 2, 8, 0);
 
 	cv::imwrite(output_path + file_name + "-output.png", colorImg);
 	cv::imshow("result", colorImg);

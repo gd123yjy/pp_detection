@@ -45,6 +45,8 @@ ImageReader.h
 /media/yjy/DATA1/VSProject/palmprint_dectection/palmprint_dectection/src/ImageReader.h
 HandDetector.h
 /media/yjy/DATA1/VSProject/palmprint_dectection/palmprint_dectection/src/HandDetector.h
+math.h
+/media/yjy/DATA1/VSProject/palmprint_dectection/palmprint_dectection/src/math.h
 opencv2/opencv.hpp
 /media/yjy/DATA1/VSProject/palmprint_dectection/palmprint_dectection/src/opencv2/opencv.hpp
 

@@ -18,7 +18,7 @@ HandDetector::HandDetector(ImageReader ir)
 HandDetector HandDetector::detect()
 {
 	//todo:eee
-	this->ir.getImg().rowRange(30,400).colRange(30,400).copyTo(this->result);
+	this->ir.getImg().rowRange(60,420).colRange(100,550).copyTo(this->result);
 	return *this;
 }
 
