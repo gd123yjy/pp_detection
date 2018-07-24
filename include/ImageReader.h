@@ -13,6 +13,7 @@ private:
 public:
 	ImageReader();
 	ImageReader(const string& path);
+	ImageReader binary();
 	void loadImg(const string& path);
 	cv::Mat getImg();
 	~ImageReader();

@@ -11,27 +11,33 @@ int distance(Vec3b a, Vec3b b)
 	return sqrt(pow((a[0] - b[0]), 2) + pow((a[1] - b[1]), 2) + pow((a[2] - b[2]), 2));
 }
 
-Mat binary(Mat colorImg)
+Mat binary(Mat colorImg, int low_thred, int high_thred)
 {
 	Mat result;
 
 	result.create(colorImg.size(), CV_8U);
+	assert(high_thred >= low_thred);
 
 	//binary basing on skin color model
-	//bgr(38,55,71)~bgr(20,26,30) mid(29,40,50)
+	//bgr(58,89,108)~bgr(20,26,30) mid(39,57,69)
 	MatConstIterator_<Vec3b> it_in = colorImg.begin<Vec3b>();
 	MatConstIterator_<Vec3b> itend_in = colorImg.end<Vec3b>();
 	MatIterator_<uchar> it_out = result.begin<uchar>();
 	MatIterator_<uchar> itend_out = result.end<uchar>();
 	while (it_in != itend_in)
 	{
-		if (distance(*it_in, Vec3b(29, 40, 50)) < 28)
+		int diff = distance(*it_in, Vec3b(36, 52, 66));
+		if (diff <= low_thred)
 		{
 			(*it_out) = 200;
 		}
-		else
+		else if (diff > high_thred)
 		{
 			(*it_out) = 0;
+		}
+		else
+		{
+			(*it_out) = 200 + 200 / (low_thred - high_thred) * (diff - low_thred);
 		}
 
 		it_in++;
@@ -41,42 +47,29 @@ Mat binary(Mat colorImg)
 	return result;
 }
 
-void matchTemplateFromBinaryImg(cv::Mat colorImg, cv::Mat binaryTemplate, Point &maxLoc, Point &maxLoc_diangle)
-{
-	double minVal;
-	double maxVal;
-	cv::Point minLoc;
-	cv::Mat result;
-
-	cv::matchTemplate(binary(colorImg), binaryTemplate, result, cv::TM_CCOEFF); //TM_SQDIFF
-
-	cv::minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, cv::Mat());
-
-	maxLoc_diangle = Point2d(maxLoc.x + binaryTemplate.cols, maxLoc.y + binaryTemplate.rows);
-}
-
-int main()
+int main(int args, char **argv)
 {
 	const string img_load_base = "/media/yjy/DATA1/VSProject/palmprint_dectection/data/input/";
 	const string img_save_base = "/media/yjy/DATA1/VSProject/palmprint_dectection/data/output/";
-	const string file_name = "IMG_0272_002_LLL_015_107";
+	const string file_name_color = argv[1]; //"IMG_0129_004_RRR_019_104";
+	const string file_name_gray = argv[2];  //"IMG_0129_004_RRR_020_104";
+	const string out_file_name = file_name_color.substr(0, file_name_color.find_first_of(".bmp"));
 
-	cv::Point maxLoc, maxLoc_diangle;
-	cv::Mat colorImg = cv::imread(img_load_base + file_name + "-color.bmp");
+	ImageReader ir_color(img_load_base + file_name_color);
+	ImageReader ir_gray(img_load_base + file_name_gray);
 
-	ImageReader ir(img_load_base + file_name + "-gray.bmp");
-	//ir.loadImg();
-	HandDetector hd(ir);
+	HandDetector hd(ir_gray.binary(), ir_color);
 
-	Mat binaryTemplate = hd.detect().getBinaryTemplate();
-	matchTemplateFromBinaryImg(colorImg, binaryTemplate, maxLoc, maxLoc_diangle);
-	cv::rectangle(colorImg, maxLoc, maxLoc_diangle, cv::Scalar(0, 155, 0), 2, 8, 0);
+	hd.detect();
 
-	cv::imwrite(img_save_base + file_name + "-output.png", colorImg);
+	Mat binaryTemplate = hd.getBinaryTemplate();
+	Mat detected_result = hd.getResult();
 
-	cv::imshow("binary color Img", binary(colorImg));
+	cv::imwrite(img_save_base + out_file_name + "-output.png", detected_result);
+
+	cv::imshow("binary color Img", binary(ir_color.getImg(), 25, 35));
 	cv::imshow("binary Template Img", binaryTemplate);
-	cv::imshow("result", colorImg);
+	cv::imshow("result", detected_result);
 	cv::waitKey(0);
 
 	return 0;

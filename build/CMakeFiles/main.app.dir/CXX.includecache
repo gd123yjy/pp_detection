@@ -25,6 +25,8 @@ opencv2/opencv.hpp
 /media/yjy/DATA1/VSProject/palmprint_dectection/palmprint_dectection/src/HandDetector.cpp
 string
 /media/yjy/DATA1/VSProject/palmprint_dectection/palmprint_dectection/src/string
+math.h
+/media/yjy/DATA1/VSProject/palmprint_dectection/palmprint_dectection/src/math.h
 HandDetector.h
 /media/yjy/DATA1/VSProject/palmprint_dectection/palmprint_dectection/src/HandDetector.h
 

@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/main.app",
-            "args": [],
+            "args": ["IMG_0272_002_LLL_015_107-color.bmp","IMG_0272_002_LLL_015_107-gray.bmp"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

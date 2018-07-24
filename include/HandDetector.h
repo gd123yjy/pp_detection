@@ -6,19 +6,24 @@
 
 using namespace std;
 
-class HandDetector :
-	public ObjectDetector
+class HandDetector : virtual public ObjectDetector
 {
 private:
-	ImageReader ir;
-	cv::Mat result;
+	ImageReader ir_gray;
+	ImageReader ir_color;
+	cv::Mat detected_result;
+	cv::Mat binaryTemplate;
+
+	void cropTemplate(cv::Mat grayImg, cv::Mat &result);
+	int distance(cv::Vec3b a, cv::Vec3b b);
+	cv::Mat binary_skin_model(cv::Mat colorImg, int low_thred, int high_thred);
+	void matchTemplateFromBinaryImg(cv::Mat colorImg, cv::Mat binaryTemplate, cv::Point &maxLoc, cv::Point &maxLoc_diangle);
+
 public:
 	HandDetector();
-	HandDetector(ImageReader ir);
+	HandDetector(ImageReader gray, ImageReader color);
 	HandDetector detect();
-	void saveResult(string path);
-	cv::Mat getResult() { return result; };
-	cv::Mat getBinaryTemplate();
+	cv::Mat getResult() { return detected_result; };
+	cv::Mat getBinaryTemplate() { return binaryTemplate; };
 	~HandDetector();
 };
-
