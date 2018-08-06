@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/main.app",
-            "args": ["IMG_0272_002_LLL_015_107-color.bmp","IMG_0272_002_LLL_015_107-gray.bmp"],
+            "args": ["palmprint/IMG_0346_012_LLL_012_099.bmp","palmvein/IMG_0346_012_LLL_013_099.bmp"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

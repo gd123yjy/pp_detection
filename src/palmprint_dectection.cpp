@@ -53,7 +53,8 @@ int main(int args, char **argv)
 	const string img_save_base = "/media/yjy/DATA1/VSProject/palmprint_dectection/data/output/";
 	const string file_name_color = argv[1]; //"IMG_0129_004_RRR_019_104";
 	const string file_name_gray = argv[2];  //"IMG_0129_004_RRR_020_104";
-	const string out_file_name = file_name_color.substr(0, file_name_color.find_first_of(".bmp"));
+	const int length = file_name_color.length()-4;
+	const string out_file_name = file_name_color.substr(0, length);
 
 	ImageReader ir_color(img_load_base + file_name_color);
 	ImageReader ir_gray(img_load_base + file_name_gray);
@@ -66,11 +67,11 @@ int main(int args, char **argv)
 	Mat detected_result = hd.getResult();
 
 	cv::imwrite(img_save_base + out_file_name + "-output.png", detected_result);
-
+/*
 	cv::imshow("binary color Img", binary(ir_color.getImg(), 25, 35));
 	cv::imshow("binary Template Img", binaryTemplate);
 	cv::imshow("result", detected_result);
 	cv::waitKey(0);
-
+*/
 	return 0;
 }
